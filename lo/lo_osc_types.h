@@ -151,7 +151,11 @@ typedef union {
 
 /** \brief A timetag constant representing "now". */
 #if defined(USE_ANSI_C) || defined(DLL_EXPORT)
+#ifdef __cplusplus
+extern 'C' lo_timetag lo_timetag lo_get_tt_immediate(); /* This variant added by JE - 06-06-2015 */
+#else
 lo_timetag lo_get_tt_immediate();
+#endif
 #define LO_TT_IMMEDIATE lo_get_tt_immediate()
 #else // !USE_ANSI_C
 #define LO_TT_IMMEDIATE ((lo_timetag){0U,1U})

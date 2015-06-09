@@ -79,14 +79,14 @@
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "liblo"
 
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING "liblo " /*VERSION*/
+/* Define to the full name and version of this package. */ /* Changed by JE - 06-06-2015 */
+#define PACKAGE_STRING @PACKAGE_STRING@
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "liblo"
 
-/* Define to the version of this package. */
-#define PACKAGE_VERSION /*VERSION*/
+/* Define to the version of this package. */ /* Changed by JE - 06-06-2015 */
+#define PACKAGE_VERSION @PACKAGE_VERSION@
 
 /* printf code for type long long int */
 #define PRINTF_LL "ll"
@@ -94,8 +94,8 @@
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
-/* Version number of package */
-#define VERSION /*VERSION*/
+/* Version number of package */ /* Changed by JE - 06-06-2015 */
+#define VERSION @VERSION@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

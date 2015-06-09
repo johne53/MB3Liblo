@@ -24,6 +24,11 @@
  * functions.
  */
 
+ /* These includes moved out of extern "C" block
+    by JE - 06-06-2015 */
+#include "lo/lo_types.h"
+#include "lo/lo_errors.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,13 +37,12 @@ extern "C" {
 #include <sys/types.h>
 #ifdef _MSC_VER
 #define ssize_t SSIZE_T
+#if !defined(UINTSDEFINED) /* Added by JE - 06-06-2013 */
 #define uint32_t unsigned __int32
+#endif
 #else
 #include <stdint.h>
 #endif
-
-#include "lo/lo_types.h"
-#include "lo/lo_errors.h"
 
 /**
  * \defgroup liblolowlevel Low-level OSC API

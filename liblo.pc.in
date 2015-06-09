@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: liblo
-Version: @PACKAGE_VERSION@
+Version: @LIBLO_VERSION@
 Description: A lightweight OSC server/client library
 Libs: -L${libdir} -llo @LIBPTHREAD@ @extralibs@
 Cflags: -I${includedir}

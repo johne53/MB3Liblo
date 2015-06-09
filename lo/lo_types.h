@@ -21,10 +21,8 @@
  * \file lo_types.h The liblo headerfile defining types used by this API.
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+/* These includes moved out of the extern "C" block
+   by JE - 06-06-2015 */
 #if defined(WIN32) || defined(_MSC_VER)
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -32,7 +30,13 @@ extern "C" {
 #include <netdb.h>
 #endif
 
+/* Ditto, these two includes */
+#include <pthread.h>
 #include "lo/lo_osc_types.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define LO_DISABLE 0  //!< Disable a boolean option.
 #define LO_ENABLE 1   //!< Enable a boolean option.
