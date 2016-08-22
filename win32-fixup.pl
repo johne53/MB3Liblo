@@ -72,11 +72,11 @@ sub process_file
 }
 
 process_file ("liblo.pc");
-process_file ("config.h");
-process_file ("lo/lo.h");
 
 my $command=join(' ',@ARGV);
 if ($command eq -buildall) {
+	process_file ("config.h");
+	process_file ("lo/lo.h");
 	process_file ("src/liblo.def");
 	process_file ("build/msvc/liblo.props");
 	process_file ("build/msvc/liblo.vsprops");
