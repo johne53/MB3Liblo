@@ -32,8 +32,19 @@ typedef __int64 int64_t;
 typedef __int32 int32_t;
 #endif
 
+#ifndef UINT_PTR
+  #ifdef HAVE_UINTPTR_T
+    #include <stdint.h>
+    #define UINT_PTR uintptr_t
+  #else
+    #define UINT_PTR unsigned long
+  #endif
+#endif
+
 #ifdef ENABLE_THREADS
+#ifdef HAVE_LIBPTHREAD
 #include <pthread.h>
+#endif
 #endif
 
 #include "lo/lo_osc_types.h"
@@ -179,7 +190,13 @@ typedef void (*lo_server_thread_cleanup_callback)(struct _lo_server_thread *s,
                                                   void *user_data);
 typedef struct _lo_server_thread {
     lo_server s;
+#ifdef HAVE_LIBPTHREAD
     pthread_t thread;
+#else
+#ifdef HAVE_WIN32_THREADS
+    HANDLE thread;
+#endif
+#endif
     volatile int active;
     volatile int done;
     lo_server_thread_init_callback cb_init;

@@ -745,7 +745,11 @@ int ok_handler(const char *path, const char *types,
     return 0;
 }
 
+#ifdef HAVE_WIN32_THREADS
+unsigned __stdcall test_tcp_thread(void *context)
+#else
 void *test_tcp_thread(void *context)
+#endif
 {
     lo_server s;
     printf("TCP thread started.\n");
@@ -753,7 +757,11 @@ void *test_tcp_thread(void *context)
     s = lo_server_new_with_proto("9000", LO_TCP, error);
     if (!s) {
         printf("Aborting thread, s=%p\n", s);
+#ifdef HAVE_WIN32_THREADS
+        return 1;
+#else
         return (void*)1;
+#endif
     }
 
     lo_server_add_method(s, "/test", "is", test_handler, 0);
@@ -868,13 +876,22 @@ void test_tcp_halfsend(int stream_type)
 
 void test_tcp_nonblock()
 {
+#ifdef HAVE_WIN32_THREADS
+    unsigned retval;
+    HANDLE thread;
+#else
     void *retval;
     pthread_t thread;
+#endif
 
     DOING("test_tcp_nonblock");
 
     tcp_done = 0;
+#ifdef HAVE_WIN32_THREADS
+    if (!(thread=(HANDLE)_beginthreadex(NULL, 0, &test_tcp_thread, 0, 0, NULL)))
+#else
     if (pthread_create(&thread, 0, test_tcp_thread, 0))
+#endif
     {
         perror("pthread_create");
         exit(1);
@@ -887,8 +904,14 @@ void test_tcp_nonblock()
     SLEEP_MS(1000);
 
     tcp_done = 1;
+#ifdef HAVE_WIN32_THREADS
+    retval = WaitForSingleObject(thread, INFINITE);
+    CloseHandle(thread);
+    printf("Thread joined, retval=%u\n", retval);
+#else
     pthread_join(thread, &retval);
     printf("Thread joined, retval=%p\n", retval);
+#endif
 
     TEST(retval == 0);
     TEST(test_received == 2);
@@ -1219,6 +1242,7 @@ void test_server_thread(lo_server_thread *pst, lo_address *pa)
     lo_server_thread_add_method(st, "/bundle", NULL, bundle_handler, NULL);
     lo_server_thread_add_method(st, "/timestamp", NULL,
                                 timestamp_handler, NULL);
+    lo_method jit =
     lo_server_thread_add_method(st, "/jitter", "ti", jitter_handler, NULL);
 
     lo_server_thread_add_method(st, "/pattern/foo", NULL,
@@ -1275,10 +1299,16 @@ void test_server_thread(lo_server_thread *pst, lo_address *pa)
 
     /* Delete methods */
     lo_server_thread_del_method(st, "/coerce", "dfhiSs");
+    TEST (lo_server_thread_del_lo_method(st, jit) == 0);
+    TEST (lo_server_thread_del_lo_method(st, jit) != 0);
 
     {
+        lo_method m;
         lo_server s = lo_server_new(NULL, error);
         lo_server_del_method(s, NULL, NULL);
+        TEST (m = lo_server_add_method(s, NULL, NULL, generic_handler, NULL));
+        TEST (lo_server_del_lo_method(s, m) == 0);
+        TEST (lo_server_del_lo_method(s, m) != 0);
         lo_server_free(s);
     }
 

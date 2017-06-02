@@ -41,6 +41,9 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <malloc.h>
+// TODO: Does this make sense on any platform? At least mingw defines
+// both EADDRINUSE and WSAEADDRINUSE and the values differ. We need to
+// check for WSAEADDRINUSE though on Windows.
 #ifndef EADDRINUSE
 #define EADDRINUSE WSAEADDRINUSE
 #endif
@@ -101,7 +104,7 @@ static int lo_server_join_multicast_group(lo_server s, const char *group,
 
 #if defined(WIN32) || defined(_MSC_VER)
 #ifndef gai_strerror
-// Copied from the Win32 SDK 
+// Copied from the Win32 SDK
 
 // WARNING: The gai_strerror inline functions below use static buffers,
 // and hence are not thread-safe.  We'll use buffers long enough to hold
@@ -167,8 +170,8 @@ static int detect_windows_server_2003_or_later()
     VER_SET_CONDITION( dwlConditionMask, VER_MINORVERSION, op );
 
     return VerifyVersionInfo(
-        &osvi, 
-        VER_MAJORVERSION | VER_MINORVERSION | 
+        &osvi,
+        VER_MAJORVERSION | VER_MINORVERSION |
         VER_SERVICEPACKMAJOR | VER_SERVICEPACKMINOR,
         dwlConditionMask);
 }
@@ -558,7 +561,11 @@ lo_server lo_server_new_with_proto_internal(const char *group,
             (bind(s->sockets[0].fd, used->ai_addr, used->ai_addrlen) <
              0)) {
             err = geterror();
+#ifdef WIN32
+            if (err == EINVAL || err == WSAEADDRINUSE) {
+#else
             if (err == EINVAL || err == EADDRINUSE) {
+#endif
                 used = NULL;
                 continue;
             }
@@ -2070,6 +2077,40 @@ void lo_server_del_method(lo_server s, const char *path,
     }
 }
 
+int lo_server_del_lo_method(lo_server s, lo_method m)
+{
+    lo_method it, prev, next;
+
+    if (!s->first)
+        return 1;
+
+    it = s->first;
+    prev = it;
+    while (it) {
+        /* incase we free it */
+        next = it->next;
+
+        if (it == m) {
+            /* Take care when removing the head. */
+            if (it == s->first) {
+                s->first = it->next;
+            } else {
+                prev->next = it->next;
+            }
+            next = it->next;
+            free((void *) it->path);
+            free((void *) it->typespec);
+            free(it);
+            it = prev;
+            return 0;
+        }
+        prev = it;
+        if (it)
+            it = next;
+    }
+    return 1;
+}
+
 int lo_server_add_bundle_handlers(lo_server s,
                                   lo_bundle_start_handler sh,
                                   lo_bundle_end_handler eh,
@@ -2200,21 +2241,39 @@ static int lo_can_coerce(char a, char b)
 // Context for error handler
 void *lo_error_context;
 #ifdef ENABLE_THREADS
-pthread_mutex_t lo_error_context_mutex = PTHREAD_MUTEX_INITIALIZER;
+#ifdef HAVE_LIBPTHREAD
+    pthread_mutex_t lo_error_context_mutex = PTHREAD_MUTEX_INITIALIZER;
+#else
+#ifdef HAVE_WIN32_THREADS
+    CRITICAL_SECTION lo_error_context_mutex = {(void*)-1,-1,0,0,0,0};
+#endif
+#endif
 #endif
 
 void lo_throw(lo_server s, int errnum, const char *message,
               const char *path)
 {
     if (s->err_h) {
-        #ifdef ENABLE_THREADS
+#ifdef ENABLE_THREADS
+#ifdef HAVE_LIBPTHREAD
         pthread_mutex_lock(&lo_error_context_mutex);
-        #endif
+#else
+#ifdef HAVE_WIN32_THREADS
+        EnterCriticalSection (&lo_error_context_mutex);
+#endif
+#endif
+#endif
         lo_error_context = s->error_user_data;
         (*s->err_h) (errnum, message, path);
-        #ifdef ENABLE_THREADS
-        pthread_mutex_unlock(&lo_error_context_mutex);
-        #endif
+#ifdef ENABLE_THREADS
+#ifdef HAVE_LIBPTHREAD
+        pthread_mutex_unlock (&lo_error_context_mutex);
+#else
+#ifdef HAVE_WIN32_THREADS
+        LeaveCriticalSection (&lo_error_context_mutex);
+#endif
+#endif
+#endif
     }
 }
 

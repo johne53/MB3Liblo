@@ -38,10 +38,11 @@ void usage(void)
 {
     printf("oscdump version %s\n"
            "Copyright (C) 2008 Kentaro Fukuchi\n\n"
-           "Usage: oscdump <port>\n"
-           "or     oscdump <url>\n"
+           "Usage: oscdump [-L] <port>\n"
+           "or     oscdump [-L] <url>\n"
            "Receive OpenSound Control messages and dump to standard output.\n\n"
            "Description\n"
+           "-L      : specifies line buffering even if stdout is a pipe or file\n"
            "port    : specifies the listening port number.\n"
            "url     : specifies the server parameters using a liblo URL.\n"
            "          e.g. UDP        \"osc.udp://:9000\"\n"
@@ -51,7 +52,9 @@ void usage(void)
 
 int bundleStartHandler(lo_timetag tt, void *user_data)
 {
-    if (memcmp(&tt, &LO_TT_IMMEDIATE, sizeof(lo_timetag))==0) {
+    if (tt.sec == LO_TT_IMMEDIATE.sec &&
+        tt.frac == LO_TT_IMMEDIATE.frac)
+    {
         lo_timetag_now(&tt_now);
         tt_bundle.sec = tt_now.sec;
         tt_bundle.frac = tt_now.frac;
@@ -85,7 +88,9 @@ int messageHandler(const char *path, const char *types, lo_arg ** argv,
     }
     else {
         lo_timetag tt = lo_message_get_timestamp(msg);
-        if (memcmp(&tt, &LO_TT_IMMEDIATE, sizeof(lo_timetag))==0) {
+        if (tt.sec == LO_TT_IMMEDIATE.sec &&
+            tt.frac == LO_TT_IMMEDIATE.frac)
+        {
             lo_timetag_now(&tt_now);
             printf("%08x.%08x %s %s", tt_now.sec, tt_now.frac, path, types);
         }
@@ -111,16 +116,36 @@ int main(int argc, char **argv)
 {
     lo_server server;
     char *port=0, *group=0;
+    int i=1;
 
-    if (argc > 1) {
-        port = argv[1];
+    if (argc > i && argv[i][0]=='-') {
+#ifdef HAVE_SETVBUF
+        if (argv[i][1]=='L') { // line buffering
+            setvbuf(stdout, 0, _IOLBF, BUFSIZ);
+            i++;
+        }
+        else
+#endif
+        if (argv[i][1]=='h') {
+            usage();
+            exit(0);
+        }
+        else {
+            printf("Unknown option `%s'\n", argv[i]);
+            exit(1);
+        }
+    }
+
+    if (argc > i) {
+        port = argv[i];
+        i++;
     } else {
         usage();
         exit(1);
     }
 
-    if (argc > 2) {
-        group = argv[2];
+    if (argc > i) {
+        group = argv[i];
     }
 
     if (group) {
