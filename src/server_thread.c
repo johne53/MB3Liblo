@@ -140,13 +140,14 @@ void lo_server_thread_set_callbacks(lo_server_thread st,
 
 int lo_server_thread_start(lo_server_thread st)
 {
+    int result;
+
     if (!st->active) {
         st->active = 1;
         st->done = 0;
 
         // Create the server thread
 #ifdef HAVE_LIBPTHREAD
-        int result;
         result=pthread_create(&(st->thread), NULL, &thread_func, st);
         if (result)
         {
