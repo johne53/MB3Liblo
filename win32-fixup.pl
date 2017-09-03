@@ -3,13 +3,13 @@
 
 require "../local-paths.lib";
 
-$version_string = "\"0.28\"";
-$package_string = "\"liblo 0.28\"";
-$liblo_version = "0.28";
+$version_string = "\"0.29\"";
+$package_string = "\"liblo 0.29\"";
+$liblo_version = "0.29";
 $major = 0;
-$minor = 28;
+$minor = 29;
 $micro = 0;
-$binary_age = 2800;
+$binary_age = 2900;
 $current_minus_age = 0;
 $gettext_package = "liblo";
 $lib_pthread = "-lpthread";
