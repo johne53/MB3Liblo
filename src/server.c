@@ -1353,19 +1353,26 @@ int lo_server_wait(lo_server s, int timeout)
 int lo_servers_wait(lo_server *s, int *status, int num_servers, int timeout)
 {
     int i, j, k, sched_timeout;
+    lo_timetag now, then;
+
+#ifdef HAVE_SELECT
+#ifndef HAVE_POLL
+    fd_set ps;
+    struct timeval stimeout;
+    struct sockaddr_storage addr;
+    socklen_t addr_len;
+#endif
+    int res, to, nfds = 0;
+#endif
 
     if (!status)
         status = alloca(sizeof(int) * num_servers);
     for (i = 0; i < num_servers; i++)
         status[i] = 0;
 
-    lo_timetag now, then;
 #ifdef HAVE_SELECT
 #ifndef HAVE_POLL
-    fd_set ps;
-    struct timeval stimeout;
-    struct sockaddr_storage addr;
-    socklen_t addr_len = sizeof(addr);
+    addr_len = sizeof(addr);
 #endif
 #endif
 
@@ -1450,7 +1457,6 @@ int lo_servers_wait(lo_server *s, int *status, int num_servers, int timeout)
     }
 #else
 #ifdef HAVE_SELECT
-    int res, to, nfds = 0;
 
 #if defined(WIN32) || defined(_MSC_VER)
     if (!initWSock())
