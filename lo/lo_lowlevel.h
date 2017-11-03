@@ -36,13 +36,14 @@ extern "C" {
 #include <stdarg.h>
 #include <sys/types.h>
 #ifdef _MSC_VER
-#define ssize_t SSIZE_T
+typedef SSIZE_T ssize_t;
 #if !defined(UINTSDEFINED) /* Added by JE - 06-06-2013 */
 #define uint32_t unsigned __int32
 #endif
 #else
 #include <stdint.h>
 #endif
+#include <stdint.h>
 
 /**
  * \defgroup liblolowlevel Low-level OSC API
