@@ -639,6 +639,7 @@ lo_server lo_server_new_with_proto_internal(const char *group,
 #if defined(WIN32) || defined(_MSC_VER)
         if (wins2003_or_later)
 #endif
+	{
         /* Join multicast group if specified. */
         if (group != NULL) {
             if (lo_server_join_multicast_group(s, group, used->ai_family,
@@ -653,7 +654,7 @@ lo_server lo_server_new_with_proto_internal(const char *group,
                  continue;
              }
 #endif
-        }
+        }}
 
         if ((used != NULL) &&
             (bind(s->sockets[0].fd, used->ai_addr, used->ai_addrlen) <
@@ -1352,7 +1353,7 @@ int lo_server_wait(lo_server s, int timeout)
 
 int lo_servers_wait(lo_server *s, int *status, int num_servers, int timeout)
 {
-    int i, j, k, sched_timeout;
+    int i, j, sched_timeout;
     lo_timetag now, then;
 
 #ifdef HAVE_SELECT
@@ -1395,6 +1396,7 @@ int lo_servers_wait(lo_server *s, int *status, int num_servers, int timeout)
     struct pollfd *sockets = alloca(sizeof(struct pollfd) * num_sockets);
 
     sched_timeout = timeout;
+
     for (j = 0, k = 0; j < num_servers; j++) {
         for (i = 0; i < s[j]->sockets_len; i++) {
             sockets[k].fd = s[j]->sockets[i].fd;
@@ -1466,7 +1468,7 @@ int lo_servers_wait(lo_server *s, int *status, int num_servers, int timeout)
   again:
 
     sched_timeout = timeout;
-    for (j = 0, k = 0; j < num_servers; j++) {
+    for (j = 0; j < num_servers; j++) {
         int server_timeout = lo_server_next_event_delay(s[j]) * 1000;
         if (server_timeout < sched_timeout)
             sched_timeout = server_timeout;

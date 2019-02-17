@@ -14,6 +14,10 @@
  *  $Id$
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -287,6 +291,7 @@ static void* thread_func(void *data)
 #error "No threading implementation selected."
 #endif
 #endif
+    return 0;
 }
 
 void lo_server_thread_pp(lo_server_thread st)
