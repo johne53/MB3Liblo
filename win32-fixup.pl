@@ -1,15 +1,15 @@
 #! e:/program files/perl/bin/perl.exe
-#  version info can be found in 'configure.ac'
+#  version info can be found in 'NEWS'
 
 require "../local-paths.lib";
 
-$version_string = "\"0.29\"";
-$package_string = "\"liblo 0.29\"";
-$liblo_version = "0.29";
+$version_string = "\"0.30\"";
+$package_string = "\"liblo 0.30\"";
+$liblo_version = "0.30";
 $major = 0;
-$minor = 29;
+$minor = 30;
 $micro = 0;
-$binary_age = 2900;
+$binary_age = 3000;
 $current_minus_age = 0;
 $gettext_package = "liblo";
 $lib_pthread = "-lpthread";
