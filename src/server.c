@@ -594,6 +594,8 @@ lo_server lo_server_new_with_proto_internal(const char *group,
                 int opt = 1;
                 setsockopt(s->sockets[0].fd, SOL_SOCKET, SO_BROADCAST,
 						   (char*)&opt, sizeof(int));
+                setsockopt(s->sockets[0].fd, IPPROTO_IP, IP_MULTICAST_LOOP,
+                           (char*)&opt, sizeof(int));
             }
         }
         if (s->sockets[0].fd == -1) {
@@ -1203,6 +1205,7 @@ int lo_server_recv_raw_stream_socket(lo_server s, int isock,
             {
                 sc->buffer_size *= 2;
                 sc->buffer = (char*)  realloc(sc->buffer, sc->buffer_size);
+                buffer_after = sc->buffer + sc->buffer_read_offset;
             }
         }
 

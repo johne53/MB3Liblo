@@ -208,7 +208,6 @@ int lo_message_add_varargs_internal(lo_message msg, const char *types,
                             "liblo error: lo_send or lo_message_add called with "
                             "invalid symbol pointer for arg %d, probably arg mismatch\n"
                             "at %s:%d, exiting.\n", count, file, line);
-                    va_end(ap);
                     return -2;
                 }
 #endif
@@ -248,7 +247,6 @@ int lo_message_add_varargs_internal(lo_message msg, const char *types,
             if (*types == '$') {
                 // type strings ending in '$$' indicate not to perform
                 // LO_MARKER checking
-                va_end(ap);
                 return 0;
             }
             // fall through to unknown type
@@ -272,7 +270,6 @@ int lo_message_add_varargs_internal(lo_message msg, const char *types,
                 "liblo error: lo_send, lo_message_add, or lo_message_add_varargs called with "
                 "mismatching types and data at\n%s:%d, exiting.\n", file,
                 line);
-        va_end(ap);
         return ret;
     }
     i = va_arg(ap, void *);
@@ -286,7 +283,6 @@ int lo_message_add_varargs_internal(lo_message msg, const char *types,
                 line);
     }
 #endif
-    va_end(ap);
 
     return ret;
 }
@@ -298,7 +294,9 @@ int lo_message_add(lo_message msg, const char *types, ...)
     const char *file = "";
     const int line = 0;
     va_start(ap, types);
-    return lo_message_add_varargs_internal(msg, types, ap, file, line);
+    int ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
+    va_end(ap);
+    return ret;
 }
 #endif
 
@@ -310,7 +308,9 @@ int lo_message_add_internal(lo_message msg, const char *file,
 {
     va_list ap;
     va_start(ap, types);
-    return lo_message_add_varargs_internal(msg, types, ap, file, line);
+    int ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
+    va_end(ap);
+    return ret;
 }
 
 int lo_message_add_int32(lo_message m, int32_t a)
@@ -934,7 +934,8 @@ lo_message lo_message_deserialise(void *data, size_t size, int *result)
 
     // args
     msg->data = malloc(remain);
-    if (NULL == msg->data) {
+    // ESP32 returns NULL for malloc(0)
+    if (NULL == msg->data && remain > 0) {
         res = LO_EALLOC;
         goto fail;
     }
