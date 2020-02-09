@@ -290,11 +290,12 @@ int lo_message_add_varargs_internal(lo_message msg, const char *types,
 #if defined(USE_ANSI_C) || defined(DLL_EXPORT)
 int lo_message_add(lo_message msg, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     va_list ap;
     const char *file = "";
     const int line = 0;
     va_start(ap, types);
-    int ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
+    /*int*/ ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
     va_end(ap);
     return ret;
 }
@@ -306,9 +307,10 @@ int lo_message_add(lo_message msg, const char *types, ...)
 int lo_message_add_internal(lo_message msg, const char *file,
                             const int line, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     va_list ap;
     va_start(ap, types);
-    int ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
+    /*int*/ ret = lo_message_add_varargs_internal(msg, types, ap, file, line);
     va_end(ap);
     return ret;
 }

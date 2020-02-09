@@ -99,11 +99,12 @@ int lo_send_varargs_internal(lo_address t, const char *file,
 #if defined(USE_ANSI_C) || defined(DLL_EXPORT)
 int lo_send(lo_address t, const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     const char *file = "";
     int line = 0;
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_varargs_internal(t, file, line, path, types, ap);
+    /*int*/ ret = lo_send_varargs_internal(t, file, line, path, types, ap);
     va_end(ap);
     return ret;
 }
@@ -115,9 +116,10 @@ int lo_send(lo_address t, const char *path, const char *types, ...)
 int lo_send_internal(lo_address t, const char *file, const int line,
                      const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_varargs_internal(t, file, line, path, types, ap);
+    /*int*/ ret = lo_send_varargs_internal(t, file, line, path, types, ap);
     va_end(ap);
     return ret;
 }
@@ -153,11 +155,12 @@ int lo_send_timestamped_varargs_internal(lo_address t, const char *file,
 int lo_send_timestamped(lo_address t, lo_timetag ts,
                         const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     const char *file = "";
     int line = 0;
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_timestamped_varargs_internal(t, file, line, ts, path,
+    /*int*/ ret = lo_send_timestamped_varargs_internal(t, file, line, ts, path,
                                                    types, ap);
     va_end(ap);
     return ret;
@@ -170,9 +173,10 @@ int lo_send_timestamped_internal(lo_address t, const char *file,
                                  const int line, lo_timetag ts,
                                  const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_timestamped_varargs_internal(t, file, line, ts, path,
+    /*int*/ ret = lo_send_timestamped_varargs_internal(t, file, line, ts, path,
                                                    types, ap);
     va_end(ap);
     return ret;
@@ -218,11 +222,12 @@ int lo_send_from_varargs_internal(lo_address to, lo_server from,
 int lo_send_from(lo_address to, lo_server from, lo_timetag ts,
                  const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     const char *file = "";
     int line = 0;
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_from_varargs_internal(to, from, file, line, ts,
+    /*int*/ ret = lo_send_from_varargs_internal(to, from, file, line, ts,
                                             path, types, ap);
     va_end(ap);
     return ret;
@@ -236,9 +241,10 @@ int lo_send_from_internal(lo_address to, lo_server from, const char *file,
                           const int line, const lo_timetag ts,
                           const char *path, const char *types, ...)
 {
+int ret; /* Added by JE - 09-02-2020 ('C' variables need to get declared at the top of a function !!!) */
     va_list ap;
     va_start(ap, types);
-    int ret = lo_send_from_varargs_internal(to, from, file, line, ts,
+    /*int*/ ret = lo_send_from_varargs_internal(to, from, file, line, ts,
                                             path, types, ap);
     va_end(ap);
     return ret;
