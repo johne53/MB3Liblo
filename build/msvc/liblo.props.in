@@ -4,7 +4,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <LibPrefix>lib</LibPrefix>
-    <LibSuffix>-0.28</LibSuffix>
+    <LibSuffix>-@LIBLO_API_VERSION@</LibSuffix>
     <GenericIncludeFolder>@GenericIncludeFolder@</GenericIncludeFolder>
     <GenericLibraryFolder>@GenericLibraryFolder@</GenericLibraryFolder>
     <GenericWin32LibraryFolder>@GenericWin32LibraryFolder@</GenericWin32LibraryFolder>
