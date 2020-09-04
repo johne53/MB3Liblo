@@ -11,7 +11,6 @@
 #endif
 
 #include <lo/lo.h>
-#define LO_USE_EXCEPTIONS
 #include <lo/lo_cpp.h>
 
 int test1(const char *path, const char *types,
@@ -141,6 +140,7 @@ int main()
     lo::ServerThread st(9000,
                         [=](int num, const char *msg, const char *where)
                         {printf("error handler: %d\n", context);});
+    context=888;
     if (!st.is_valid()) {
         printf("Nope.\n");
         return 1;
@@ -233,6 +233,7 @@ int main()
     // Test exceptions
     {
 #ifdef LO_USE_EXCEPTIONS
+        printf("Testing exceptions.\n");
         try {
 #endif
             lo::ServerThread st2(9000);
@@ -241,6 +242,8 @@ int main()
                 return 1;
             }
 #ifdef LO_USE_EXCEPTIONS
+            printf("Exception not thrown when expected!\n");
+            return 1;
         } catch(lo::Invalid e) {
             printf("Invalid! (unexpected)\n");
             return 1;
@@ -255,6 +258,6 @@ int main()
 #else
     sleep(1);
 #endif
-    printf("%s: %d\n", a.errstr().c_str(), a.get_errno());
+    printf("%s (errno=%d)\n", a.errstr().c_str(), a.get_errno());
     return a.get_errno();
 }
