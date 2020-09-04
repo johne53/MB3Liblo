@@ -874,6 +874,8 @@ void *lo_message_serialise(lo_message m, const char *path, void *to,
 
 lo_message lo_message_deserialise(void *data, size_t size, int *result)
 {
+char *path; /* Added by JE - 04-09-2020 ('C' variables need to get declared at the top of a function !!!) */
+
     lo_message msg = NULL;
     char *types = NULL, *ptr = NULL;
     int i = 0, argc = 0, remain = size, res = 0, len;
@@ -906,7 +908,7 @@ lo_message lo_message_deserialise(void *data, size_t size, int *result)
         res = LO_EINVALIDPATH;  // invalid path string
         goto fail;
     }
-    char *path = (char*)data;
+    path = (char*)data;
     if (path[0] != '/' && path[0] != '#') {
         res = LO_EINVALIDPATH;  // invalid path string
         goto fail;

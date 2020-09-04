@@ -1035,12 +1035,15 @@ void cleanup_context(struct socket_context *sc)
 static
 uint32_t lo_server_buffer_contains_msg(lo_server s, int isock)
 {
+char *str;         /* Added by JE - 04-09-2020 ('C' variables need to get declared at the top of a function !!!) */
+uint32_t msg_len;  /* Added by JE - 04-09-2020 ('C' variables need to get declared at the top of a function !!!) */
+
     struct socket_context *sc = &s->contexts[isock];
     if (sc->buffer_read_offset <= sizeof(uint32_t))
         return 0;
 
-    uint32_t msg_len = ntohl(*(uint32_t*)sc->buffer);
-    char *str = (char*)(sc->buffer + sizeof(uint32_t));
+    msg_len = ntohl(*(uint32_t*)sc->buffer);
+    str = (char*)(sc->buffer + sizeof(uint32_t));
     if (str[0] != '/' && str[0] != '#')
     {
         // invalid message
