@@ -23,14 +23,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -38,7 +38,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release with Debugging Capability|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -105,11 +105,9 @@
       <PreprocessorDefinitions>_DEBUG;WIN32;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;LIBLO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../lo;../../src;../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(ProjectName)64D.lib</OutputFile>
-    </Lib>
+    <Lib />
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(GenericWin64LibraryFolder)\$(TargetName).lib"
+      <Command>copy /Y "$(TargetPath)" "$(GenericWin64LibraryFolder)\$(TargetName)$(TargetExt)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -138,23 +136,19 @@
       <AdditionalIncludeDirectories>../../lo;../../src;../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(GenericWin64LibraryFolder)\$(TargetName).lib"
+      <Command>copy /Y "$(TargetPath)" "$(GenericWin64LibraryFolder)\$(TargetName)$(TargetExt)"
 </Command>
     </PostBuildEvent>
-    <Lib>
-      <OutputFile>$(OutDir)$(ProjectName)64.lib</OutputFile>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release with Debugging Capability|x64'">
     <PreBuildEvent>
       <Message>Prepare configuration file(s)</Message>
       <Command>copy /Y "..\config-msvc.h" "..\..\config.h.in"
-
 copy /Y "..\lo_endian-msvc.h" "..\..\lo\lo_endian.h"
-
 cd ../..
-
-perl win32-fixup.pl
+perl
+win32-fixup.pl
 </Command>
     </PreBuildEvent>
     <ClCompile>
@@ -174,18 +168,12 @@ perl win32-fixup.pl
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;LIBLO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>../../lo;../../src;../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
-    <Lib>
-      <OutputFile>$(OutDir)$(ProjectName)64RDC.lib</OutputFile>
-    </Lib>
+    <Lib />
     <PostBuildEvent>
       <Command>mkdir "$(GenericLibraryFolder)\pkgconfig" 2&gt; NUL
-
 mkdir "$(GenericIncludeFolder)\lo" 2&gt; NUL
-
 copy /Y "..\..\lo\*.h" "$(GenericIncludeFolder)\lo"
-
-copy /Y "$(OutDir)$(TargetName).lib" "$(GenericWin64LibraryFolder)\$(TargetName).lib"
-
+copy /Y "$(TargetPath)" "$(GenericWin64LibraryFolder)\$(TargetName)$(TargetExt)"
 copy /Y "..\..\liblo.pc" "$(GenericLibraryFolder)\pkgconfig"
 </Command>
     </PostBuildEvent>
