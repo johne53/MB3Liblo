@@ -124,7 +124,7 @@
       <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;HAVE_STRUCT_TIMESPEC;LIBLO_LIB;UINTSDEFINED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>CompileAsC</CompileAs>
