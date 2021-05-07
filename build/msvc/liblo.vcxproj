@@ -89,7 +89,7 @@
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;$(GenericIncludeFolder)\ardourext;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;_WIN32;WIN32;DEBUG;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;HAVE_STRUCT_TIMESPEC;LIBLO_LIB;UINTSDEFINED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -121,7 +121,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;$(GenericIncludeFolder)\ardourext;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;HAVE_STRUCT_TIMESPEC;LIBLO_LIB;UINTSDEFINED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -154,7 +154,7 @@ win32-fixup.pl
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <OmitFramePointers>true</OmitFramePointers>
-      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..;../../lo;../../src;$(GenericIncludeFolder)\ardourext\ptw32;$(GenericIncludeFolder)\ardourext;../..;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;_WIN32;WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;HAVE_CONFIG_H;HAVE_STRUCT_TIMESPEC;LIBLO_LIB;UINTSDEFINED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>false</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
