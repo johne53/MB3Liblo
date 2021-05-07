@@ -36,6 +36,9 @@ extern "C" {
 #include <stdarg.h>
 #include <sys/types.h>
 #ifdef _MSC_VER
+#ifndef SSIZE_T /* This section added by JE - 5-05-2021 */
+typedef LONG_PTR SSIZE_T;
+#endif
 typedef SSIZE_T ssize_t;
 #if !defined(UINTSDEFINED) /* Added by JE - 06-06-2013 */
 #define uint32_t unsigned __int32

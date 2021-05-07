@@ -27,6 +27,9 @@
 #endif
 
 #ifdef _MSC_VER
+#ifndef SSIZE_T /* This section added by JE - 5-05-2021 */
+typedef LONG_PTR SSIZE_T;
+#endif
 typedef SSIZE_T ssize_t;
 #endif
 
