@@ -36,6 +36,7 @@ extern "C" {
 #include <stdarg.h>
 #include <sys/types.h>
 #ifdef _MSC_VER
+#include <BaseTsd.h>
 #ifndef SSIZE_T /* This section added by JE - 5-05-2021 */
 typedef LONG_PTR SSIZE_T;
 #endif
